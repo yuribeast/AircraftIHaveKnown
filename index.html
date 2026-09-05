@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aircraft I Have Known</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
+
+        .header-subtitle {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .header-subtitle span {
+            font-size: 0.95rem;
+        }
+
+        .header-subtitle .author-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            margin-top: 1px;
+        }
+        :root {
+            --card-bg: rgba(69, 72, 74, 0.9);
+            --text-color: #f8f9fa;
+            --accent-color: #38bdf8;
+            --border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-image: url('images/Barry on F104.webp');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #2d3032;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: rgba(45, 48, 50, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        header h1 a.home-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s ease, opacity 0.2s ease;
+        }
+
+        header h1 a.home-link:hover {
+            color: #ffffff;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .category-filters, .sub-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn, .back-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active, .back-btn:hover {
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+        }
+
+        .mig-alley-btn {
+            background-color: rgba(185, 28, 28, 0.85);
+            color: #ffff00;
+            border: 1px solid #7f1d1d;
+            font-weight: bold;
+        }
+
+        .mig-alley-btn:hover, .mig-alley-btn.active {
+            background-color: #dc2626;
+            color: #ffffff;
+            border-color: #facc15;
+            box-shadow: 0 0 8px rgba(250, 204, 21, 0.4);
+        }
+
+        .nato-btn {
+            background-color: rgba(30, 58, 138, 0.85);
+            color: #ffffff;
+            border: 1px solid #1d4ed8;
+            font-weight: bold;
+        }
+
+        .nato-btn:hover, .nato-btn.active {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #60a5fa;
+            box-shadow: 0 0 8px rgba(96, 165, 250, 0.4);
+        }
+
+        .usa-btn {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #dc2626;
+            border: 1px solid #b91c1c;
+            font-weight: bold;
+        }
+
+        .usa-btn:hover, .usa-btn.active {
+            background-color: #f8fafc;
+            color: #991b1b;
+            border-color: #ef4444;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            display: none;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-color);
+        }
+
+        .image-container {
+            width: 100%;
+            height: 200px;
+            background-color: #1a1c1d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            color: transparent;
+        }
+
+        .card-info {
+            padding: 1rem;
+        }
+
+        .card-info h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .card-info p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #d0d4d8;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 0;
+            font-size: 0.75rem;
+            border-radius: 3px;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
+        .tag-mig-alley { color: #ef4444; }
+        .tag-nato { color: #3b82f6; }
+        .tag-usa { color: #ffffff; }
+        .tag-demo { color: #38bdf8; }
+        .tag-cargo { color: #a3e635; }
+        .tag-trainer { color: #f59e0b; }
+
+        /* Detail View Header */
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            background: var(--card-bg);
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .detail-header h2 {
+            margin: 0;
+            color: var(--accent-color);
+        }
+
+        .detail-header p {
+            margin: 0;
+            color: #d0d4d8;
+            font-size: 0.9rem;
+        }
+
+        /* Lightbox Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 75vh;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            object-fit: contain;
+        }
+        
+        .lightbox-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        #modalImg {
+            transition: transform 0.3s ease;
+            cursor: zoom-in;
+        }
+
+        #modalImg.zoomed {
+            transform: scale(2.5);
+            cursor: zoom-out;
+        }
+        .modal-caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #f8f9fa;
+            padding: 15px 0;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .prev-btn, .next-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 4px;
+            transform: translateY(-50%);
+            user-select: none;
+        }
+
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+
+        .prev-btn:hover, .next-btn:hover, .close-btn:hover {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+    <h1><a href="#" class="home-link" onclick="resetToMainGrid(); return false;">✈ Aircraft I Have Known</a></h1>
+    <div class="header-subtitle">
+        <span>Aircraft Photography Staging</span>
+        <span class="author-name">by Barry Davis</span>
+    </div>
+</header>
+
+    <div class="container">
+        <!-- Main Filter Navigation -->
+        <div id="navigation-controls">
+            <div class="category-filters">
+                <button class="filter-btn" onclick="filterCategory('fighters', this)">Fighters</button>
+                <button class="filter-btn" onclick="filterCategory('demo-teams', this)">Demonstration Teams</button>
+                <button class="filter-btn" onclick="filterCategory('cargo', this)">Cargo</button>
+                <button class="filter-btn" onclick="filterCategory('trainers', this)">Trainers</button>
+                <button class="filter-btn" onclick="filterCategory('recon', this)">Reconnaissance</button>
+                <button class="filter-btn" onclick="filterCategory('commercial', this)">Commercial</button>
+            </div>
+
+            <div id="fighters-subtabs" class="sub-filters" style="display: none;">
+                <button class="filter-btn mig-alley-btn" onclick="filterSubCategory('mig-alley', this)">Mig Alley</button>
+                <button class="filter-btn nato-btn" onclick="filterSubCategory('nato', this)">NATO</button>
+                <button class="filter-btn usa-btn" onclick="filterSubCategory('usa', this)">USA</button>
+            </div>
+
+            <div id="demo-teams-subtabs" class="sub-filters" style="display: none;">
+                <button class="filter-btn" onclick="filterSubCategory('usaf-thunderbirds', this)">USAF Thunderbirds</button>
+                <button class="filter-btn" onclick="filterSubCategory('usn-blue-angels', this)">USN Blue Angels</button>
+                <button class="filter-btn" onclick="filterSubCategory('raf-red-arrows', this)">RAF Red Arrows</button>
+                <button class="filter-btn" onclick="filterSubCategory('rcaf-snowbirds', this)">RCAF Snowbirds</button>
+                <button class="filter-btn" onclick="filterSubCategory('frecce-tricolori', this)">Italian Airforce Frecce Tricolori</button>
+                <button class="filter-btn" onclick="filterSubCategory('patrouille-de-france', this)">Patrouille de France</button>
+                <button class="filter-btn" onclick="filterSubCategory('patriots-jet-team', this)">Patriots Jet Team</button>
+            </div>
+        </div>
+
+        <!-- Detail Page Header (Shown when viewing an aircraft's full thumbnail set) -->
+        <div id="detail-header" class="detail-header" style="display: none;">
+            <button class="back-btn" onclick="backToMainCategory()">← Back to Category</button>
+            <div>
+                <h2 id="detail-title">Aircraft Gallery</h2>
+                <p id="detail-desc">Sub-gallery views for this aircraft type</p>
+            </div>
+        </div>
+
+        <!-- Main Aircraft Grid -->
+        <div class="gallery-grid" id="main-grid">
+            <!-- Title Frames load *-title.webp by default. Clicking opens sub-gallery page -->
+            
+            <!-- Mig Alley -->
+            <div class="card" data-category="fighters" data-subcategory="mig-alley" onclick="openAircraftGallery('Mig-15 Fagot', 'Swept-Wing Jet Fighter', 'Mig-15', ['Mig-15 Fagot-title.webp', 'Mig-15 Fagot-01.webp', 'Mig-15-02.webp'])">
+                <div class="image-container"><img src="images/Mig-15 Fagot-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>Mig-15</h3><p>Swept-Wing Jet Fighter</p><span class="tag tag-mig-alley">Mig Alley</span></div>
+            </div>
+
+            <div class="card" data-category="fighters" data-subcategory="mig-alley" onclick="openAircraftGallery('Mig-17 Fresco', 'Transonic Fighter Interceptor', 'Mig-17', ['Mig-17 Fresco-title.webp', 'Mig-17 Fresco-01.webp'])">
+                <div class="image-container"><img src="images/Mig-17 Fresco-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>Mig-17 Fresco</h3><p>Transonic Fighter Interceptor</p><span class="tag tag-mig-alley">Mig Alley</span></div>
+            </div>
+
+            <div class="card" data-category="fighters" data-subcategory="mig-alley" onclick="openAircraftGallery('Mig-19 Farmer', '1 Soviet Supersonic Jet Fighter', ' Farmer', ['Mig-19 Farmer-title.webp', 'Mig-19-01.webp'])">
+                <div class="image-container"><img src="images/Mig-19 Farmer-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>Mig-19 Farmer</h3><p>1st Soviet Supersonic Jet Fighter</p><span class="tag tag-mig-alley">Mig Alley</span></div>
+            </div>
+
+            <div class="card" data-category="fighters" data-subcategory="mig-alley" onclick="openAircraftGallery('Mig-21', 'Supersonic Jet Interceptor', 'Mig-21', ['Mig-21-title.webp', 'Mig-21-01.webp'])">
+                <div class="image-container"><img src="images/Mig-21-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>Mig-21</h3><p>Supersonic Jet Interceptor</p><span class="tag tag-mig-alley">Mig Alley</span></div>
+            </div>
+
+            <div class="card" data-category="fighters" data-subcategory="mig-alley" onclick="openAircraftGallery('Mig-23', 'Variable-Geometry Fighter', 'Mig-23', ['Mig-23-title.webp', 'Mig-23-01.webp'])">
+                <div class="image-container"><img src="images/Mig-23-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>Mig-23</h3><p>Variable-Geometry Fighter</p><span class="tag tag-mig-alley">Mig Alley</span></div>
+            </div>
+
+            <div class="card" data-category="fighters" data-subcategory="mig-alley" onclick="openAircraftGallery('Mig-29 Fulcrum', 'Air Superiority Fighter', 'Mig-29', ['Mig-29 Fulcrum-title.webp', 'Mig-29 Fulcrum-01.webp'])">
+                <div class="image-container"><img src="images/Mig-29 Fulcrum-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>Mig-29</h3><p>Air Superiority Fighter</p><span class="tag tag-mig-alley">Mig Alley</span></div>
+            </div>
+
+            <div class="card" data-category="fighters" data-subcategory="mig-alley" onclick="openAircraftGallery('Top Gun Aggressor', '&quot;Mig-28&quot; - Northrop F-5E Tiger II', 'Aggressor', ['Topgun Aggressor-title.webp', 'Topgun Aggressor-01.webp'])">
+                <div class="image-container"><img src="images/Topgun Aggressor-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>Top Gun Aggressor</h3><p>"Simulated a Soviet Mig-28 for the movie Topgun" - Northrop F-5E Tiger II</p><span class="tag tag-mig-alley">Mig Alley</span></div>
+            </div>
+
+            <!-- NATO & USA -->
+            <div class="card" data-category="fighters" data-subcategory="nato" onclick="openAircraftGallery('Panavia Tornado', 'Variable-Sweep Multi-Role Aircraft', 'NATO', ['Panavia Tornado-title.webp', 'Panavia Tornado-01.webp'])">
+                <div class="image-container"><img src="images/Panavia Tornado-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>Panavia Tornado</h3><p>Variable-Sweep Multi-Role Aircraft</p><span class="tag tag-nato">NATO</span></div>
+            </div>
+
+            <div class="card" data-category="fighters" data-subcategory="usa" onclick="openAircraftGallery('F-15 Eagle', 'Air Superiority Fighter', 'USA', ['F-15 Eagle-title.webp', 'F-15 Eagle-01.webp'])">
+                <div class="image-container"><img src="images/F-15 Eagle-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>F-15 Eagle</h3><p>Air Superiority Fighter</p><span class="tag tag-usa">USA</span></div>
+            </div>
+
+            <div class="card" data-category="fighters" data-subcategory="usa" onclick="openAircraftGallery('F-86 Sabre', '1st USAF Transonic Swept-Wing Day Fighter / Interceptor', 'USA', ['F-86 Sabre-title.webp', 'F-86 Sabre-01.webp'])">
+                <div class="image-container"><img src="images/F-86 Sabre-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>F-86 Sabre</h3><p>1st USAF Transonic Swept-Wing Day Fighter / Interceptor</p><span class="tag tag-usa">USA</span></div>
+            </div>
+
+            <!-- Demonstration Teams -->
+            <div class="card" data-category="demo-teams" data-subcategory="usaf-thunderbirds" onclick="openAircraftGallery('USAF Thunderbirds', 'General Dynamics F-16 Fighting Falcon', 'Demo', ['thunderbirds-title.webp', 'thunderbirds-01.webp'])">
+                <div class="image-container"><img src="images/thunderbirds-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>USAF Thunderbirds</h3><p>General Dynamics F-16 Fighting Falcon</p><span class="tag tag-demo">USAF Thunderbirds</span></div>
+            </div>
+
+            <div class="card" data-category="demo-teams" data-subcategory="usn-blue-angels" onclick="openAircraftGallery('USN Blue Angels', 'Boeing F/A-18 Super Hornet', 'Demo', ['blue-angels-title.webp', 'blue-angels-01.webp'])">
+                <div class="image-container"><img src="images/blue-angels-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>USN Blue Angels</h3><p>Boeing F/A-18 Super Hornet</p><span class="tag tag-demo">USN Blue Angels</span></div>
+            </div>
+
+            <div class="card" data-category="demo-teams" data-subcategory="raf-red-arrows" onclick="openAircraftGallery('RAF Red Arrows', 'BAE Systems Hawk T1', 'Demo', ['red-arrows-title.webp', 'red-arrows-01.webp'])">
+                <div class="image-container"><img src="images/red-arrows-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>RAF Red Arrows</h3><p>BAE Systems Hawk T1</p><span class="tag tag-demo">RAF Red Arrows</span></div>
+            </div>
+
+            <div class="card" data-category="demo-teams" data-subcategory="rcaf-snowbirds" onclick="openAircraftGallery('RCAF Snowbirds', 'Canadair CT-114 Tutor', 'Demo', ['snowbirds-title.webp', 'snowbirds-01.webp'])">
+                <div class="image-container"><img src="images/snowbirds-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>RCAF Snowbirds</h3><p>Canadair CT-114 Tutor</p><span class="tag tag-demo">RCAF Snowbirds</span></div>
+            </div>
+
+            <div class="card" data-category="demo-teams" data-subcategory="frecce-tricolori" onclick="openAircraftGallery('Italian Airforce Frecce Tricolori', 'Aermacchi MB-339A/PAN', 'Demo', ['frecce-tricolori-title.webp', 'frecce-tricolori-01.webp'])">
+                <div class="image-container"><img src="images/frecce-tricolori-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>Italian Airforce Frecce Tricolori</h3><p>Aermacchi MB-339A/PAN</p><span class="tag tag-demo">Frecce Tricolori</span></div>
+            </div>
+
+            <div class="card" data-category="demo-teams" data-subcategory="patrouille-de-france" onclick="openAircraftGallery('Patrouille de France', 'Dassault/Dornier Alpha Jet', 'Demo', ['patrouille-de-france-title.webp', 'patrouille-de-france-01.webp'])">
+                <div class="image-container"><img src="images/patrouille-de-france-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>Patrouille de France</h3><p>Dassault/Dornier Alpha Jet</p><span class="tag tag-demo">Patrouille de France</span></div>
+            </div>
+
+            <div class="card" data-category="demo-teams" data-subcategory="patriots-jet-team" onclick="openAircraftGallery('Patriots Jet Team', 'Aero L-39 Albatros', 'Demo', ['patriots-jet-team-title.webp', 'patriots-jet-team-01.webp'])">
+                <div class="image-container"><img src="images/patriots-jet-team-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>Patriots Jet Team</h3><p>Aero L-39 Albatros</p><span class="tag tag-demo">Patriots Jet Team</span></div>
+            </div>
+
+            <!-- Cargo -->
+            <div class="card" data-category="cargo" onclick="openAircraftGallery('C-130 Hercules', 'Tactical Transport Aircraft', 'Cargo', ['c130-title.webp', 'c130-01.webp'])">
+                <div class="image-container"><img src="images/c130-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>C-130 Hercules</h3><p>Tactical Transport Aircraft</p><span class="tag tag-cargo">Cargo</span></div>
+            </div>
+
+            <div class="card" data-category="cargo" onclick="openAircraftGallery('C-17 Globemaster III', 'Strategic / Tactical Airlifter', 'Cargo', ['c17-title.webp', 'c17-01.webp'])">
+                <div class="image-container"><img src="images/c17-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>C-17 Globemaster III</h3><p>Strategic / Tactical Airlifter</p><span class="tag tag-cargo">Cargo</span></div>
+            </div>
+
+            <div class="card" data-category="cargo" onclick="openAircraftGallery('C-5 Galaxy', 'Heavy Strategic Airlifter', 'Cargo', ['c5-title.webp', 'c5-01.webp'])">
+                <div class="image-container"><img src="images/c5-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>C-5 Galaxy</h3><p>Heavy Strategic Airlifter</p><span class="tag tag-cargo">Cargo</span></div>
+            </div>
+
+            <!-- Trainers -->
+            <div class="card" data-category="trainers" onclick="openAircraftGallery('T-37 Tweet', 'Twin-Engine Primary Jet Trainer', 'Trainers', ['t37-title.webp', 't37-01.webp'])">
+                <div class="image-container"><img src="images/t37-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>T-37 Tweet</h3><p>Twin-Engine Primary Jet Trainer</p><span class="tag tag-trainer">Trainers</span></div>
+            </div>
+
+            <div class="card" data-category="trainers" onclick="openAircraftGallery('T-38 Talon', 'Twin-Engine Supersonic Jet Trainer', 'Trainers', ['t38-title.webp', 't38-01.webp'])">
+                <div class="image-container"><img src="images/t38-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>T-38 Talon</h3><p>Twin-Engine Supersonic Jet Trainer</p><span class="tag tag-trainer">Trainers</span></div>
+            </div>
+
+            <div class="card" data-category="trainers" onclick="openAircraftGallery('T-6 Texan II', 'Single-Engine Turboprop Trainer', 'Trainers', ['t6-title.webp', 't6-01.webp'])">
+                <div class="image-container"><img src="images/t6-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>T-6 Texan II</h3><p>Single-Engine Turboprop Trainer</p><span class="tag tag-trainer">Trainers</span></div>
+            </div>
+
+            <div class="card" data-category="trainers" onclick="openAircraftGallery('T-45 Goshawk', 'Carrier-Capable Jet Trainer', 'Trainers', ['t45-title.webp', 't45-01.webp'])">
+                <div class="image-container"><img src="images/t45-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>T-45 Goshawk</h3><p>Carrier-Capable Jet Trainer</p><span class="tag tag-trainer">Trainers</span></div>
+            </div>
+
+            <!-- Recon & Commercial -->
+            <div class="card" data-category="recon" onclick="openAircraftGallery('SR-71 Blackbird', 'Strategic Reconnaissance', 'Recon', ['sr-71-title.webp', 'sr-71-01.webp'])">
+                <div class="image-container"><img src="images/sr-71-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>SR-71 Blackbird</h3><p>Strategic Reconnaissance</p><span class="tag">Reconnaissance</span></div>
+            </div>
+
+            <div class="card" data-category="commercial" onclick="openAircraftGallery('Boeing 737', 'Commercial Airliner', 'Commercial', ['737-title.webp', '737-01.webp'])">
+                <div class="image-container"><img src="images/737-title.webp" alt="" onerror="this.style.opacity='0'"></div>
+                <div class="card-info"><h3>Boeing 737</h3><p>Commercial Airliner</p><span class="tag">Commercial</span></div>
+            </div>
+        </div>
+
+        <!-- Sub-Gallery Grid (Populated dynamically when an aircraft tile is clicked) -->
+        <div class="gallery-grid" id="detail-grid" style="display: none;"></div>
+    </div>
+
+    <!-- Image Modal Lightbox -->
+    <div id="imageModal" class="modal" onclick="closeModal(event)">
+        <span class="close-btn" onclick="closeModal(event)">&times;</span>
+        <a class="prev-btn" onclick="navigateModal(-1); event.stopPropagation();">&#10094;</a>
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <img class="modal-content" id="modalImg" alt="Full size image" onclick="toggleZoom(event)">
+        </div>
+        <a class="next-btn" onclick="navigateModal(1); event.stopPropagation();">&#10095;</a>
+        <div class="modal-caption" id="modalCaption"></div>
+    </div>
+
+    <script>
+        let currentCategory = '';
+        let currentSubcategory = '';
+        let currentSubGalleryImages = [];
+        let currentModalIndex = 0;
+
+        function filterCategory(category, element) {
+            currentCategory = category;
+            currentSubcategory = '';
+            
+            const mainGrid = document.getElementById('main-grid');
+            const detailGrid = document.getElementById('detail-grid');
+            const detailHeader = document.getElementById('detail-header');
+            const navControls = document.getElementById('navigation-controls');
+
+            detailGrid.style.display = 'none';
+            detailHeader.style.display = 'none';
+            mainGrid.style.display = 'grid';
+            navControls.style.display = 'block';
+
+            const cards = document.querySelectorAll('#main-grid .card');
+            const mainButtons = document.querySelectorAll('.category-filters .filter-btn');
+            const subButtons = document.querySelectorAll('.sub-filters .filter-btn');
+            const fightersSubtabs = document.getElementById('fighters-subtabs');
+            const demoSubtabs = document.getElementById('demo-teams-subtabs');
+
+            mainButtons.forEach(btn => btn.classList.remove('active'));
+            subButtons.forEach(btn => btn.classList.remove('active'));
+
+            if (element) element.classList.add('active');
+
+            fightersSubtabs.style.display = 'none';
+            demoSubtabs.style.display = 'none';
+
+            if (category === 'fighters') {
+                fightersSubtabs.style.display = 'flex';
+                cards.forEach(card => card.style.display = 'none');
+            } else if (category === 'demo-teams') {
+                demoSubtabs.style.display = 'flex';
+                cards.forEach(card => card.style.display = 'none');
+            } else {
+                cards.forEach(card => {
+                    card.style.display = (card.getAttribute('data-category') === category) ? 'block' : 'none';
+                });
+            }
+        }
+
+        function filterSubCategory(subcategory, element) {
+            currentSubcategory = subcategory;
+            const cards = document.querySelectorAll('#main-grid .card[data-subcategory]');
+            const subButtons = document.querySelectorAll('.sub-filters .filter-btn');
+
+            subButtons.forEach(btn => btn.classList.remove('active'));
+            if (element) element.classList.add('active');
+
+            cards.forEach(card => {
+                card.style.display = (card.getAttribute('data-subcategory') === subcategory) ? 'block' : 'none';
+            });
+        }
+
+        /* Displays sub-gallery view of all images matching the selected aircraft */
+        function openAircraftGallery(title, description, tagLabel, imageList) {
+            currentSubGalleryImages = imageList;
+            
+            document.getElementById('navigation-controls').style.display = 'none';
+            document.getElementById('main-grid').style.display = 'none';
+            
+            const detailHeader = document.getElementById('detail-header');
+            const detailGrid = document.getElementById('detail-grid');
+            
+            document.getElementById('detail-title').innerText = title;
+            document.getElementById('detail-desc').innerText = description;
+            
+            detailHeader.style.display = 'flex';
+            detailGrid.style.display = 'grid';
+            detailGrid.innerHTML = '';
+
+           imageList.forEach((imgFilename, index) => {
+                const subCard = document.createElement('div');
+                subCard.className = 'card';
+                subCard.style.display = 'block';
+                subCard.onclick = () => openModal(index, title, description);
+
+                subCard.innerHTML = `
+                    <div class="image-container">
+                        <img src="images/${imgFilename}" alt="" onerror="this.style.opacity='0'">
+                    </div>
+                    <div class="card-info">
+                        <h3>${imgFilename}</h3>
+                        <p>${description}</p>
+                        <span class="tag tag-demo">${tagLabel}</span>
+                    </div>
+                `;
+                detailGrid.appendChild(subCard);
+            });
+        }
+
+        function backToMainCategory() {
+            document.getElementById('detail-grid').style.display = 'none';
+            document.getElementById('detail-header').style.display = 'none';
+            document.getElementById('navigation-controls').style.display = 'block';
+            document.getElementById('main-grid').style.display = 'grid';
+        }
+
+        function resetToMainGrid() {
+            backToMainCategory();
+            const cards = document.querySelectorAll('#main-grid .card');
+            cards.forEach(card => card.style.display = 'none');
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('fighters-subtabs').style.display = 'none';
+            document.getElementById('demo-teams-subtabs').style.display = 'none';
+        }
+
+        /* Lightbox modal functions */
+        function openModal(index, title, description) {
+            currentModalIndex = index;
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImg');
+            modalImg.classList.remove('zoomed'); // Resets zoom for the new image
+            modal.style.display = 'block';
+            updateModalView(title, description);
+        }
+
+        function toggleZoom(event) {
+            const img = event.target;
+            img.classList.toggle('zoomed');
+        }
+
+        function updateModalView(title, description) {
+            const modalImg = document.getElementById('modalImg');
+            const modalCaption = document.getElementById('modalCaption');
+            const filename = currentSubGalleryImages[currentModalIndex];
+
+            modalImg.src = `images/${filename}`;
+            modalCaption.innerHTML = `<h2>${title} (${currentModalIndex + 1}/${currentSubGalleryImages.length})</h2><p>${filename} - ${description}</p>`;
+        }
+
+        function navigateModal(direction) {
+            currentModalIndex += direction;
+            if (currentModalIndex < 0) currentModalIndex = currentSubGalleryImages.length - 1;
+            if (currentModalIndex >= currentSubGalleryImages.length) currentModalIndex = 0;
+            
+            const title = document.getElementById('detail-title').innerText;
+            const description = document.getElementById('detail-desc').innerText;
+            updateModalView(title, description);
+        }
+
+        function closeModal(event) {
+            if (event.target.classList.contains('modal') || event.target.classList.contains('close-btn')) {
+                document.getElementById('imageModal').style.display = 'none';
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('imageModal').style.display = 'none';
+            } else if (e.key === 'ArrowLeft') {
+                if (document.getElementById('imageModal').style.display === 'block') navigateModal(-1);
+            } else if (e.key === 'ArrowRight') {
+                if (document.getElementById('imageModal').style.display === 'block') navigateModal(1);
+            }
+        });
+    </script>
+</body>
+</html>
