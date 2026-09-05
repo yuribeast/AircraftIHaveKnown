@@ -41,7 +41,21 @@
             background-repeat: no-repeat;
             background-attachment: scroll;
             background-color: #2d3032;
-            min-height: 100vh;
+            min-height: 100dvh; /* Updated to fix mobile toolbar shifting */
+        }
+
+        @media (orientation: landscape) {
+            body {
+                background-size: cover;
+                background-position: center center;
+            }
+        }
+
+        @media (orientation: portrait) {
+            body {
+                background-size: contain;
+                background-position: center center;
+            }
         }
 
         header {
